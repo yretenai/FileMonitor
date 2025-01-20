@@ -9,6 +9,8 @@ import FileMonitorShared
 import FileMonitorMacOS
 #elseif os(Linux)
 import FileMonitorLinux
+#elseif os(Windows)
+import FileMonitorWin32
 #endif
 
 /// Errors that `FileMonitor` can throw
@@ -49,8 +51,10 @@ public struct FileMonitor: WatcherDelegate {
             watcher = LinuxWatcher(directory: url)
         #elseif os(macOS)
             watcher = try MacosWatcher(directory: url)
+        #elseif os(Windows)
+            watcher = try WindowsWatcher(directory: url)
         #else
-            throw FileMonitorErrors.unsupported_os()
+            throw FileMonitorErrors.unsupported_os
         #endif
 
         watcher.delegate = self
